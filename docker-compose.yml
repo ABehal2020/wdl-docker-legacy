@@ -1,0 +1,8 @@
+version: '3'
+
+services:
+  web:
+    build: .
+    command: python download.py download-meta.txt
+    volumes:
+      - .:/usr/src/app
