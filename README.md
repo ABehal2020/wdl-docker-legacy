@@ -1,7 +1,7 @@
 # wdl-docker
-CHiP-Seq visualization tool for ENCODE data 
+Dockerized CHiP-Seq visualization tool for ENCODE data 
 
-The WDL script tests 2 parts of the tool (both parts successfully pass the test): 
+Calling the visualization tool docker image, the WDL script tests 2 parts of the tool (both parts successfully pass the test): 
 1) Passing JSON metadata of experimental data from ENCODE server and getting s3_urls for bigwig files
 2) Passing the s3_urls for bigwig files (output from first part) and getting the contents of the bigwig files
 
