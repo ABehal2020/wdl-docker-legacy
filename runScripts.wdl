@@ -12,9 +12,8 @@ task parse_json {
 		File downloadMeta = 'download-meta.txt'
 	}
 	runtime {
-		# docker: 'cherry101/wdl-docker@sha256:4efef9d1cbf3e877d6426ec3269efdd6602cda12d6ccc4a7c617bb2484748e48'
-		# docker: 'wdl-docker:v12'
-		docker: 'wdl-docker:v16'
+	    docker: 'wdl-docker:v24'
+		# docker: 'cherry101/wdl-docker@sha256:e3d38661cb255d220e6fba4ef3c356ff6e67e32bf6557f3f838224acaff52f14'
 	}
 }
 
@@ -29,20 +28,15 @@ task md5parse_json {
 task download {
 	File downloadInfo
 	command {
-		ls
-		pwd
-		echo ${downloadInfo}
 		python /usr/src/app/download.py ${downloadInfo}
-		ls
-		pwd
 	}
 	output {
 		# File bigwig1 = 'ENCFF075MCN'
 		# File bigwig2 = 'ENCFF231NTN'
 		# File bigwig3 = 'ENCFF415GFH'
-		File bigwig1 = glob('ENC*')[0]
-		File bigwig2 = glob('ENC*')[1]
-		File bigwig3 = glob('ENC*')[2]
+		File bigwig1 = glob('*.bigwig')[0]
+		File bigwig2 = glob('*.bigwig')[1]
+		File bigwig3 = glob('*.bigwig')[2]
 	}
 
 	# for docker image v13 where test file is being downloaded using requests api in python - fails when output section is specified
@@ -51,9 +45,8 @@ task download {
 		# File sample = 'instructions'
 	# }
 	runtime {
-		# docker: 'cherry101/wdl-docker@sha256:4efef9d1cbf3e877d6426ec3269efdd6602cda12d6ccc4a7c617bb2484748e48'
-		# docker: 'wdl-docker:v12'
-		docker: 'wdl-docker:v16'
+	    docker: 'wdl-docker:v24'
+		# docker: 'cherry101/wdl-docker@sha256:e3d38661cb255d220e6fba4ef3c356ff6e67e32bf6557f3f838224acaff52f14'
 	}
 }
 
@@ -64,7 +57,6 @@ task md5download {
 	File refbw1
 	File refbw2
 	File refbw3
-
 	command {
 		md5sum ${inputbw1} ${refbw1} > md5bw1compare.txt
 		md5sum ${inputbw2} ${refbw2} > md5bw2compare.txt
@@ -72,24 +64,53 @@ task md5download {
 	}
 }
 
+task computeCorr {
+    File bigwig1
+    File bigwig2
+    File bigwig3
+    command {
+        python /usr/src/app/correlate.py ${bigwig1} ${bigwig2} ${bigwig3}
+    }
+    output {
+        File corrScores = "corrScores.txt"
+    }
+    runtime {
+        docker: 'wdl-docker:v24'
+    }
+}
+
+task md5computeCorr {
+    File corrScores
+    File refScores
+    command {
+		md5sum ${corrScores} ${refScores} > md5scores.txt
+	}
+}
+
 workflow main {
 	File jsonMain
-	File refMain
+	File jsonRefMain
 	File refbw1main
 	File refbw2main
 	File refbw3main
-
+	File refScoresMain
 	call parse_json {
 		input: json = jsonMain
 	}
 	call md5parse_json {
-		input: inputFile = parse_json.urls, refFile = refMain
+		input: inputFile = parse_json.urls, refFile = jsonRefMain
 	}
 	call download {
 		input: downloadInfo = parse_json.downloadMeta
 	}
 	call md5download as md5download {
 		input: inputbw1 = download.bigwig1, inputbw2 = download.bigwig2, inputbw3 = download.bigwig3, refbw1 = refbw1main, refbw2 = refbw2main, refbw3 = refbw3main
+	}
+	call computeCorr {
+	    input: bigwig1 = download.bigwig1, bigwig2 = download.bigwig2, bigwig3 = download.bigwig3
+	}
+	call md5computeCorr {
+	    input: corrScores = computeCorr.corrScores, refScores = refScoresMain
 	}
 }
 

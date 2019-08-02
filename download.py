@@ -28,8 +28,8 @@ def create_output_folder(enc_link_name):
 
 def download_file(file_name, s3_url, enc_link_name):
     # os.mkdir('/usr/src/app/januModule/treatment-data/' + enc_link_name)
-    # file_path = '/usr/src/app/files/' + uniq + '/' + str(file_name)
-    file_path = file_name
+    # file_path = '/usr/src/app/files/' + uniq + '/' + str(file_name) + '.bigwig'
+    file_path = file_name + '.bigwig'
     try:
         r = requests.get(s3_url, allow_redirects=True)
         # print('content-dispositiins')

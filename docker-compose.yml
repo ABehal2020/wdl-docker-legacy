@@ -3,6 +3,6 @@ version: '3'
 services:
   web:
     build: .
-    command: python download.py download-meta.txt
+    command: python correlate.py 1.bigwig 2.bigwig 3.bigwig
     volumes:
       - .:/usr/src/app

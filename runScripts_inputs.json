@@ -1,7 +1,8 @@
 {
   "main.jsonMain": "ENCSR193NSH.json",
-  "main.refMain": "ref1.txt",
+  "main.jsonRefMain": "ref1.txt",
   "main.refbw1main": "1.bigwig",
   "main.refbw2main": "2.bigwig",
-  "main.refbw3main": "3.bigwig"
+  "main.refbw3main": "3.bigwig",
+  "main.refScoresMain": "refScores.txt"
 }
