@@ -12,7 +12,7 @@ task parse_json {
 		File downloadMeta = 'download-meta.txt'
 	}
 	runtime {
-	    docker: 'wdl-docker:v24'
+	    docker: 'wdl-docker:v25'
 		# docker: 'cherry101/wdl-docker@sha256:e3d38661cb255d220e6fba4ef3c356ff6e67e32bf6557f3f838224acaff52f14'
 	}
 }
@@ -31,9 +31,9 @@ task download {
 		python /usr/src/app/download.py ${downloadInfo}
 	}
 	output {
-		# File bigwig1 = 'ENCFF075MCN'
-		# File bigwig2 = 'ENCFF231NTN'
-		# File bigwig3 = 'ENCFF415GFH'
+		# File bigwig1 = 'ENCFF075MCN.bigwig'
+		# File bigwig2 = 'ENCFF231NTN.bigwig'
+		# File bigwig3 = 'ENCFF415GFH.bigwig'
 		File bigwig1 = glob('*.bigwig')[0]
 		File bigwig2 = glob('*.bigwig')[1]
 		File bigwig3 = glob('*.bigwig')[2]
@@ -45,7 +45,7 @@ task download {
 		# File sample = 'instructions'
 	# }
 	runtime {
-	    docker: 'wdl-docker:v24'
+	    docker: 'wdl-docker:v25'
 		# docker: 'cherry101/wdl-docker@sha256:e3d38661cb255d220e6fba4ef3c356ff6e67e32bf6557f3f838224acaff52f14'
 	}
 }
@@ -75,7 +75,7 @@ task computeCorr {
         File corrScores = "corrScores.txt"
     }
     runtime {
-        docker: 'wdl-docker:v24'
+        docker: 'wdl-docker:v25'
     }
 }
 
