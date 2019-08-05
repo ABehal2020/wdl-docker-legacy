@@ -21,8 +21,6 @@ jobs:
           command: |
             echo 'export TAG=0.1.${CIRCLE_BUILD_NUM}' >> $BASH_ENV
             echo 'export IMAGE_NAME=python-circleci-docker' >> $BASH_ENV
-            virtualenv wdl-docker
-            . wdl-docker/bin/activate
             pip install -r requirements.txt
       - run:
           name: Run hello-world.py
@@ -44,7 +42,6 @@ test_parsing_task:
       - run: *get_cromwell
       - run:
           command: |
-            . wdl-docker/bin/activate
             source ${BASH_ENV}
             test/test.sh test/test_task/test-parse.wdl test/test_task/test-parse_inputs.json $TAG docker
             python3 src/compare_md5.py --keys_to_inspect parse_json.urls --metadata_json test_parse_inputs.metadata.json --reference_json test/test_tasks/ref_output/parse_ref.json --outfile result.json
