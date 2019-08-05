@@ -5,7 +5,7 @@ Calling the visualization tool docker image, the WDL script tests 2 parts of the
 1) Passing JSON metadata of experimental data from ENCODE server and getting s3_urls for bigwig files
 2) Passing the s3_urls for bigwig files (output from first part) and getting the contents of the bigwig files
 
-After cloning this directory, make sure to have cromwell.jar and wdltool.jar installed directly under wdl-docker directory.
+After cloning this repository, make sure to have cromwell.jar and wdltool.jar installed directly under wdl-docker directory.
 
 Also, download these 3 files (reference bigwig files) in the same directory:
 
