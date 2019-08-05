@@ -17,7 +17,7 @@ https://encode-public.s3.amazonaws.com/2018/03/06/32417a7e-b149-40b5-a4c0-facbab
 
 Then, run this command to see the workflow testing: java -jar cromwell.jar run runScripts.wdl -i runScripts_inputs.json
 
-For unit testing, navigate to the test/test-data directory and copy the 3 downloaded bigwig files there and rename them:
+For unit testing of correlate, navigate to the test/test-data directory and copy the 3 downloaded bigwig files there and rename them:
 "1.bigwig" should be renamed to "ENCFF075MCN.bigwig"
 "2.bigwig" should be renamed to "ENCFF231NTN.bigwig"
 "3.bigwig" should be renamed to "ENCFF415GFH.bigwig"
