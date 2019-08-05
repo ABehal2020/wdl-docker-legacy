@@ -1,4 +1,5 @@
 #!/bin/bash
+# updated
 
 set -e # exit on error
 
