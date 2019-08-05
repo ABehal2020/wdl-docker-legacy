@@ -44,6 +44,7 @@ jobs:
       steps:
         - checkout
         - run: *get_cromwell
+        - run: *set_docker
         - run:
             command: |
               source ${BASH_ENV}
