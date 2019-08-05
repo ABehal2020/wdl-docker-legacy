@@ -39,7 +39,6 @@ test_parsing_task:
     <<: *defaults
     steps:
       - checkout
-      - run: *make_tag
       - run: *get_cromwell
       - run:
           command: |
