@@ -23,10 +23,6 @@ jobs:
             echo 'export IMAGE_NAME=python-circleci-docker' >> $BASH_ENV
             sudo pip install -r requirements.txt
       - run:
-          name: Run hello-world.py
-          command: |
-            python hello-world.py
-      - run:
           name: Build and push Docker image
           command: |
             source ${BASH_ENV}
