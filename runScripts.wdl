@@ -12,8 +12,8 @@ task parse_json {
 		File downloadMeta = 'download-meta.txt'
 	}
 	runtime {
-	    docker: 'wdl-docker:v25'
-		# docker: 'cherry101/wdl-docker@sha256:e3d38661cb255d220e6fba4ef3c356ff6e67e32bf6557f3f838224acaff52f14'
+	    # docker: 'wdl-docker:v25'
+		docker: 'cherry101/wdl-docker@sha256:ffe1bf2428d11f28168f05b4384d03e7b9d49c3ee8ee2e6a0e66a905c4e44a25'
 	}
 }
 
@@ -45,8 +45,8 @@ task download {
 		# File sample = 'instructions'
 	# }
 	runtime {
-	    docker: 'wdl-docker:v25'
-		# docker: 'cherry101/wdl-docker@sha256:e3d38661cb255d220e6fba4ef3c356ff6e67e32bf6557f3f838224acaff52f14'
+	    # docker: 'wdl-docker:v25'
+		docker: 'cherry101/wdl-docker@sha256:ffe1bf2428d11f28168f05b4384d03e7b9d49c3ee8ee2e6a0e66a905c4e44a25'
 	}
 }
 
@@ -75,7 +75,8 @@ task computeCorr {
         File corrScores = "corrScores.txt"
     }
     runtime {
-        docker: 'wdl-docker:v25'
+        # docker: 'wdl-docker:v25'
+        docker: 'cherry101/wdl-docker@sha256:ffe1bf2428d11f28168f05b4384d03e7b9d49c3ee8ee2e6a0e66a905c4e44a25'
     }
 }
 
