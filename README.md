@@ -1,9 +1,10 @@
 # wdl-docker
-Part of the dockerized CHiP-Seq visualization tool for ENCODE data for testing/validation purposes
+Part of the dockerized CHiP-Seq visualization tool for ENCODE data for successful testing/validation purposes
 
-Calling the visualization tool docker image, the WDL script tests 2 parts of the tool (both parts successfully pass the test): 
+Calling the visualization tool docker image, the WDL script tests 3 parts of the tool (which all pass the test) to ensure proper data and calculation integry throughout.
 1) Passing JSON metadata of experimental data from ENCODE server and getting s3_urls for bigwig files
 2) Passing the s3_urls for bigwig files (output from first part) and getting the contents of the bigwig files
+3) Passing the contents of the bigwig files (output from the second part) and getting the correlation scores
 
 After cloning this repository, make sure to have cromwell.jar and wdltool.jar installed directly under wdl-docker directory.
 
