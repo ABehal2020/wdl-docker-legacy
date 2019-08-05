@@ -1,6 +1,11 @@
-defaults: &defaults
+defaults: &build_env
   docker:
     - image: circleci/python:3.6.1
+  working_directory: ~/wdl-docker
+  
+defaults: &run_env
+  docker:
+    - image: cherry101/python-circleci-docker:0.1.${CIRCLE_BUILD_NUM}
   working_directory: ~/wdl-docker
   
 set_docker: &set_docker
@@ -17,7 +22,7 @@ get_cromwell: &get_cromwell
 version: 2
 jobs:
   build:
-    <<: *defaults
+    <<: *build_env
     steps:
       - checkout
       - setup_remote_docker:
@@ -34,10 +39,9 @@ jobs:
             docker logout
 
   test_parsing_task:
-      <<: *defaults
+      <<: *run_env
       steps:
         - checkout
-        - run: *set_docker
         - run: *get_cromwell
         - run:
             command: |
