@@ -3,6 +3,11 @@ defaults: &defaults
     - image: circleci/python:3.6.1
   working_directory: ~/wdl-docker
 
+machine_defaults: &machine_defaults
+  machine: 
+    image: circleci/classic:latest
+  working_directory: ~/demo-pipeline
+  
 set_docker: &set_docker
   name: make docker image tag
   command: |
@@ -30,9 +35,10 @@ jobs:
             docker build -t cherry101/$IMAGE_NAME:$TAG .
             docker login -u $DOCKER_LOGIN -p $DOCKER_PWD
             docker push cherry101/$IMAGE_NAME:$TAG
+            docker logout
 
   test_parsing_task:
-      <<: *defaults
+      <<: *machine_defaults
       steps:
         - checkout
         - run: *set_docker
