@@ -1,9 +1,9 @@
-defaults: &build_env
+build_env: &build_env
   docker:
     - image: circleci/python:3.6.1
   working_directory: ~/wdl-docker
   
-defaults: &run_env
+run_env: &run_env
   docker:
     - image: cherry101/python-circleci-docker:0.1.${CIRCLE_BUILD_NUM}
   working_directory: ~/wdl-docker
