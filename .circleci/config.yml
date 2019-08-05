@@ -37,6 +37,7 @@ jobs:
             docker login -u $DOCKER_LOGIN -p $DOCKER_PWD
             docker push cherry101/$IMAGE_NAME:$TAG
             docker logout
+          no_output_timeout: 30m
 
   test_parsing_task:
       <<: *run_env
