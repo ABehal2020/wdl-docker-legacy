@@ -28,7 +28,6 @@ jobs:
             docker build -t cherry101/$IMAGE_NAME:$TAG .
             docker login -u $DOCKER_LOGIN -p $DOCKER_PWD
             docker push cherry101/$IMAGE_NAME:$TAG
-            docker logout
 
   test_parsing_task:
       <<: *defaults
