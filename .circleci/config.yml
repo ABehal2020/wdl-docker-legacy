@@ -2,11 +2,6 @@ defaults: &defaults
   docker:
     - image: circleci/python:3.6.1
   working_directory: ~/wdl-docker
-
-machine_defaults: &machine_defaults
-  machine: 
-    image: circleci/classic:latest
-  working_directory: ~/demo-pipeline
   
 set_docker: &set_docker
   name: make docker image tag
@@ -21,7 +16,7 @@ get_cromwell: &get_cromwell
 
 version: 2
 jobs:
-  build:
+  make_docker:
     <<: *defaults
     steps:
       - checkout
@@ -38,7 +33,7 @@ jobs:
             docker logout
 
   test_parsing_task:
-      <<: *machine_defaults
+      <<: *defaults
       steps:
         - checkout
         - run: *set_docker
@@ -55,7 +50,7 @@ workflows:
   version: 2
   build_workflow:
     jobs:
-      - build
+      - make_docker
       - test_parsing_task:
           requires:
-            - build
+            - make_docker
