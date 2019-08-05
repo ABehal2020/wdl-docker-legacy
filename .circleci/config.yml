@@ -2,10 +2,12 @@ build_env: &build_env
   docker:
   - image: circleci/python:3.6.1
   working_directory: ~/wdl-docker
+
 run_env: &run_env
   docker:
   - image: cherry101/python-circleci-docker:${CIRCLE_BRANCH}_${CIRCLE_WORKFLOW_ID}
   working_directory: ~/wdl-docker
+
 set_docker: &set_docker
   name: make docker image tag
   command: |
