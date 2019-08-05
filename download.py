@@ -28,14 +28,16 @@ def create_output_folder(enc_link_name):
 
 def download_file(file_name, s3_url, enc_link_name):
     # os.mkdir('/usr/src/app/januModule/treatment-data/' + enc_link_name)
-    # file_path = '/usr/src/app/files/' + uniq + '/' + str(file_name)
-    file_path = '/usr/src/app/' + file_name
+    # file_path = '/usr/src/app/files/' + uniq + '/' + str(file_name) + '.bigwig'
+    file_path = file_name + '.bigwig'
     try:
         r = requests.get(s3_url, allow_redirects=True)
         # print('content-dispositiins')
         # print(r.headers.get('content-disposition'))
         with open(file_path, 'wb') as f:
             f.write(r.content)
+        print("")
+        print("")
     except Exception as error:
         print("error")
         print(error)
@@ -45,7 +47,7 @@ def download_file(file_name, s3_url, enc_link_name):
 
 # testing requests api for wdl script
 def download_end():
-    file_path = '/usr/src/app/instructions'
+    file_path = 'instructions'
     s3_url = 'http://25.io/toau/audio/sample.txt'
     try:
         r = requests.get(s3_url, allow_redirects=True)
@@ -99,8 +101,9 @@ def main(args):
 # wdl main
 def main(args):
     create_download_folder(link_name)
-    # download_all_files(sys.argv[1])
-    download_end()
+    # download_file("ENCFF075MCN", "https://encode-public.s3.amazonaws.com/2018/03/06/c2206997-d760-4f5a-a403-175e7779e2ed/ENCFF075MCN.bigWig", link_name)
+    download_all_files(sys.argv[1])
+    # download_end()
     create_output_folder(link_name)
 
 if __name__ == '__main__':
