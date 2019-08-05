@@ -1,5 +1,6 @@
 # wdl-docker
 Part of the dockerized CHiP-Seq visualization tool for ENCODE data for successful testing/validation purposes 
+
 Note: Because this application is dockerized and references a docker built and pushed to Docker Hub, you don't need to download the bigwig files or anything else oustide of cromwell.jar, wdltool.jar, and wdl-scripts with their associated JSON files. If you want to explore the bigwig files and their directories as referenced in the code, you can download the bigwig files as specified in this document.
 
 Calling the visualization tool docker image, the WDL script tests 3 parts of the tool (which all pass the test) to ensure proper data and calculation integry throughout.
