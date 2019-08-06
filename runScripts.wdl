@@ -104,7 +104,7 @@ workflow main {
 	call download {
 		input: downloadInfo = parse_json.downloadMeta
 	}
-	call md5download as md5download {
+	call md5download {
 		input: inputbw1 = download.bigwig1, inputbw2 = download.bigwig2, inputbw3 = download.bigwig3, refbw1 = refbw1main, refbw2 = refbw2main, refbw3 = refbw3main
 	}
 	call computeCorr {
