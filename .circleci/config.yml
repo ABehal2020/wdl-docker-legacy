@@ -40,7 +40,6 @@ jobs:
 
   test_parsing_task:
       <<: *run_env
-      root: /usr/src/app/wdl-docker
       steps:
         - checkout
         - run: *get_cromwell
