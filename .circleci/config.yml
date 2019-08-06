@@ -3,6 +3,11 @@ build_env: &build_env
   - image: circleci/python:3.6.1
   working_directory: ~/wdl-docker
 
+machine_defaults: &machine_defaults
+  machine: 
+    image: circleci/classic:latest
+  working_directory: ~/wdl-docker
+  
 run_env: &run_env
   docker:
   - image: cherry101/python-circleci-docker:${CIRCLE_BRANCH}_${CIRCLE_WORKFLOW_ID}
@@ -39,7 +44,7 @@ jobs:
           no_output_timeout: 30m
 
   test_parsing_task:
-      <<: *run_env
+      <<: *machine_defaults
       steps:
         - checkout
         - run: *get_cromwell
