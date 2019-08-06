@@ -87,8 +87,21 @@ jobs:
               python3 src/compare_md5.py --keys_to_inspect corrMain.corrScores --metadata_json test-correlate_inputs.metadata.json --reference_json test/test-tasks/ref_output/correlate_ref.json --outfile result.json
               cat result.json
               python3 -c "import sys; import json; data=json.loads(sys.stdin.read()); sys.exit(int(not data['match_overall']))" < result.json
- 
-
+  
+  test_workflow:
+    <<: *machine_defaults
+    steps:
+      - checkout
+      - run: *get_cromwell
+      - run: *set_docker
+      - run: 
+            command: |
+              pyenv global 3.5.2
+              source ${BASH_ENV}
+              test/test.sh runScripts.wdl runScripts_inputs.json $TAG docker
+              python3 src/compare_md5.py --keys_to_inspect parse_json.urls parse_json.downloadMeta download.bigwig1 download.bigwig2 download.bigwig3 computeCorr.corrScores --metadata_json runScripts_inputs.metadata.json --reference_json test/test-workflow/ref-output/runScripts_ref.json --outfile result.json
+              cat result.json
+             
 workflows:
   version: 2
   build_workflow:
@@ -101,5 +114,8 @@ workflows:
           requires:
             - build
       - test_computing_task:
+          requires:
+            - build
+      - test_workflow:
           requires:
             - build
