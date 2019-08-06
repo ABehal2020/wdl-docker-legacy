@@ -50,10 +50,9 @@ jobs:
               source ${BASH_ENV}
               echo "present working directory alert before running test.sh"
               pwd
+              ls -lat
               test/test.sh test/test-tasks/test-parse.wdl test/test-tasks/test-parse_inputs.json $TAG docker
-              echo "present working directory alert after running test.sh"
-              pwd
-              python3 src/compare_md5.py --keys_to_inspect parse_json.urls --metadata_json test_parse_inputs.metadata.json --reference_json test/test-tasks/ref_output/parse_ref.json --outfile result.json
+              python3 src/compare_md5.py --keys_to_inspect parse_json.urls --metadata_json test/test-tasks/test_parse_inputs.metadata.json --reference_json test/test-tasks/ref_output/parse_ref.json --outfile result.json
               cat result.json
               python3 -c "import sys; import json; data=json.loads(sys.stdin.read()); sys.exit(int(not data['match_overall']))" < result.json
 
