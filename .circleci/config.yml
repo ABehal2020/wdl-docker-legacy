@@ -1,17 +1,72 @@
+build_env: &build_env
+  docker:
+  - image: circleci/python:3.6.1
+  working_directory: ~/wdl-docker
+
+machine_defaults: &machine_defaults
+  machine: 
+    image: circleci/classic:latest
+  working_directory: ~/wdl-docker
+  
+run_env: &run_env
+  docker:
+  - image: cherry101/python-circleci-docker:${CIRCLE_BRANCH}_${CIRCLE_WORKFLOW_ID}
+  working_directory: ~/wdl-docker
+
+set_docker: &set_docker
+  name: make docker image tag
+  command: |
+    echo 'export TAG=${CIRCLE_BRANCH}_${CIRCLE_WORKFLOW_ID}' >> $BASH_ENV
+    echo 'export IMAGE_NAME=python-circleci-docker' >> $BASH_ENV
+    
+get_cromwell: &get_cromwell
+  name: get the cromwell 42
+  command: |
+    wget -N -c https://github.com/broadinstitute/cromwell/releases/download/42/cromwell-42.jar
+
 version: 2
 jobs:
- build:
-   machine: true
-   steps:
-     - checkout
-     # start proprietary DB using private Docker image
-     # with credentials stored in the UI
-     - run: |
-         echo "$DOCKER_PASS" | docker login --username cherry101 --password-stdin
-         docker run -d --name db company/proprietary-db:1.2.3
+  build:
+    <<: *build_env
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - run: *set_docker
+      - run:
+          name: Build and push Docker image
+          command: |
+            source ${BASH_ENV}
+            docker build -t cherry101/$IMAGE_NAME:$TAG .
+            docker login -u $DOCKER_LOGIN -p $DOCKER_PWD
+            docker push cherry101/$IMAGE_NAME:$TAG
+            docker logout
+          no_output_timeout: 30m
 
-     # build the application image
-     - run: docker build -t company/app:$CIRCLE_BRANCH .
+  test_parsing_task:
+      <<: *machine_defaults
+      steps:
+        - checkout
+        - run: *get_cromwell
+        - run: *set_docker
+        - run:
+            command: |
+              pyenv global 3.5.2
+              source ${BASH_ENV}
+              echo "present working directory"
+              pwd
+              echo "what's inside the present working directory"
+              ls -lat
+              test/test.sh test/test-tasks/test-parse.wdl test/test-tasks/test-parse_inputs.json $TAG docker
+              python3 src/compare_md5.py --keys_to_inspect mainParse.urls --metadata_json test-parse_inputs.metadata.json --reference_json test/test-tasks/ref_output/parse_ref.json --outfile result.json
+              cat result.json
+              python3 -c "import sys; import json; data=json.loads(sys.stdin.read()); sys.exit(int(not data['match_overall']))" < result.json
 
-     # deploy the image
-     - run: docker push company/app:$CIRCLE_BRANCH
+workflows:
+  version: 2
+  build_workflow:
+    jobs:
+      - build
+      - test_parsing_task:
+          requires:
+            - build

@@ -1,0 +1,58 @@
+defaults: &defaults
+  docker:
+    - image: circleci/python:3.6.1
+  working_directory: ~/wdl-docker
+
+get_cromwell: &get_cromwell
+  name: get the cromwell 42
+  command: |
+    wget -N -c https://github.com/broadinstitute/cromwell/releases/download/42/cromwell-42.jar
+
+version: 2
+jobs:
+  build:
+    <<: *defaults
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - run:
+          name: Install dependencies
+          command: |
+            echo 'export TAG=0.1.${CIRCLE_BUILD_NUM}' >> $BASH_ENV
+            echo 'export IMAGE_NAME=python-circleci-docker' >> $BASH_ENV
+            pip install -r requirements.txt
+      - run:
+          name: Run hello-world.py
+          command: |
+            python hello-world.py
+      - run:
+          name: Build and push Docker image
+          command: |
+            source ${BASH_ENV}
+            docker build -t cherry101/$IMAGE_NAME:$TAG .
+            docker login -u $DOCKER_LOGIN -p $DOCKER_PWD
+            docker push cherry101/$IMAGE_NAME:$TAG
+            docker logout
+
+test_parsing_task:
+    <<: *defaults
+    steps:
+      - checkout
+      - run: *get_cromwell
+      - run:
+          command: |
+            source ${BASH_ENV}
+            test/test.sh test/test_task/test-parse.wdl test/test_task/test-parse_inputs.json $TAG docker
+            python3 src/compare_md5.py --keys_to_inspect parse_json.urls --metadata_json test_parse_inputs.metadata.json --reference_json test/test_tasks/ref_output/parse_ref.json --outfile result.json
+            cat result.json
+            python3 -c "import sys; import json; data=json.loads(sys.stdin.read()); sys.exit(int(not data['match_overall']))" < result.json
+
+workflows:
+  version: 2
+  build_workflow:
+    jobs:
+      - build
+      - test_parsing_task:
+          requires:
+            - build
