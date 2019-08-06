@@ -53,12 +53,8 @@ jobs:
             command: |
               pyenv global 3.5.2
               source ${BASH_ENV}
-              echo "present working directory"
-              pwd
-              echo "what's inside the present working directory"
-              ls -lat
               test/test.sh test/test-tasks/test-parse.wdl test/test-tasks/test-parse_inputs.json $TAG docker
-              python3 src/compare_md5.py --keys_to_inspect mainParse.urls --metadata_json test-parse_inputs.metadata.json --reference_json test/test-tasks/ref_output/parse_ref.json --outfile result.json
+              python3 src/compare_md5.py --keys_to_inspect mainParse.urls mainParse.downloadMeta --metadata_json test-parse_inputs.metadata.json --reference_json test/test-tasks/ref_output/parse_ref.json --outfile result.json
               cat result.json
               python3 -c "import sys; import json; data=json.loads(sys.stdin.read()); sys.exit(int(not data['match_overall']))" < result.json
 
