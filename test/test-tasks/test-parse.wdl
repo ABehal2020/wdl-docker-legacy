@@ -1,6 +1,6 @@
 import "../../runScripts.wdl" as runScripts
 
-workflow main {
+workflow mainParse {
     File jsonMain
     call runScripts.parse_json as parsing {
         input: json = jsonMain
