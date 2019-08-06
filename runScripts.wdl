@@ -113,5 +113,13 @@ workflow main {
 	# call md5computeCorr {
 	    # input: corrScores = computeCorr.corrScores, refScores = refScoresMain
 	# }
+	output {
+		urls = parse_json.urls
+		downloadMeta = parse_json.downloadMeta
+		bigwig1 = download.bigwig1
+		bigwig2 = download.bigwig2
+		bigwig3 = download.bigwige
+		corrScores = computeCorr.corrScores
+	}
 }
 
