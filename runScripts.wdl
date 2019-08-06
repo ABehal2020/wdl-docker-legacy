@@ -114,12 +114,12 @@ workflow main {
 	    # input: corrScores = computeCorr.corrScores, refScores = refScoresMain
 	# }
 	output {
-		urls = parse_json.urls
-		downloadMeta = parse_json.downloadMeta
-		bigwig1 = download.bigwig1
-		bigwig2 = download.bigwig2
-		bigwig3 = download.bigwige
-		corrScores = computeCorr.corrScores
+		File urls = parse_json.urls
+		File downloadMeta = parse_json.downloadMeta
+		File bigwig1 = download.bigwig1
+		File bigwig2 = download.bigwig2
+		File bigwig3 = download.bigwige
+		File corrScores = computeCorr.corrScores
 	}
 }
 
