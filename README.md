@@ -33,3 +33,5 @@ java -jar ../../cromwell.jar run test-download.wdl -i test-download_inputs.json
 
 # correlate unit test
 java -jar ../../cromwell.jar run test-correlate.wdl -i test-correlate_inputs.json
+
+# CircleCI testing workflow (in progress)
