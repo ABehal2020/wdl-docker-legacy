@@ -118,7 +118,7 @@ workflow main {
 		File downloadMeta = parse_json.downloadMeta
 		File bigwig1 = download.bigwig1
 		File bigwig2 = download.bigwig2
-		File bigwig3 = download.bigwige
+		File bigwig3 = download.bigwig3
 		File corrScores = computeCorr.corrScores
 	}
 }
