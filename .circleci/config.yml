@@ -53,20 +53,69 @@ jobs:
             command: |
               pyenv global 3.5.2
               source ${BASH_ENV}
-              echo "present working directory"
-              pwd
-              echo "what's inside the present working directory"
-              ls -lat
               test/test.sh test/test-tasks/test-parse.wdl test/test-tasks/test-parse_inputs.json $TAG docker
-              python3 src/compare_md5.py --keys_to_inspect mainParse.urls --metadata_json test-parse_inputs.metadata.json --reference_json test/test-tasks/ref_output/parse_ref.json --outfile result.json
+              python3 src/compare_md5.py --keys_to_inspect mainParse.urls mainParse.downloadMeta --metadata_json test-parse_inputs.metadata.json --reference_json test/test-tasks/ref_output/parse_ref.json --outfile result.json
               cat result.json
               python3 -c "import sys; import json; data=json.loads(sys.stdin.read()); sys.exit(int(not data['match_overall']))" < result.json
 
+  test_downloading_task:
+      <<: *machine_defaults
+      steps:
+        - checkout
+        - run: *get_cromwell
+        - run: *set_docker
+        - run:
+            command: |
+              pyenv global 3.5.2
+              source ${BASH_ENV}
+              test/test.sh test/test-tasks/test-download.wdl test/test-tasks/test-download_inputs.json $TAG docker
+              python3 src/compare_md5.py --keys_to_inspect downloadbwMain.bigwig1 downloadbwMain.bigwig2 downloadbwMain.bigwig3 --metadata_json test-download_inputs.metadata.json --reference_json test/test-tasks/ref_output/download_ref.json --outfile result.json
+              cat result.json
+              python3 -c "import sys; import json; data=json.loads(sys.stdin.read()); sys.exit(int(not data['match_overall']))" < result.json
+              
+  test_computing_task:
+      <<: *machine_defaults
+      steps:
+        - checkout
+        - run: *get_cromwell
+        - run: *set_docker
+        - run:
+            command: |
+              pyenv global 3.5.2
+              source ${BASH_ENV}
+              test/test.sh test/test-tasks/test-correlate.wdl test/test-tasks/test-correlate_inputs.json $TAG docker
+              python3 src/compare_md5.py --keys_to_inspect corrMain.corrScores --metadata_json test-correlate_inputs.metadata.json --reference_json test/test-tasks/ref_output/correlate_ref.json --outfile result.json
+              cat result.json
+              python3 -c "import sys; import json; data=json.loads(sys.stdin.read()); sys.exit(int(not data['match_overall']))" < result.json
+  
+  test_workflow:
+    <<: *machine_defaults
+    steps:
+      - checkout
+      - run: *get_cromwell
+      - run: *set_docker
+      - run: 
+            command: |
+              pyenv global 3.5.2
+              source ${BASH_ENV}
+              test/test.sh runScripts.wdl runScripts_inputs.json $TAG docker
+              python3 src/compare_md5.py --keys_to_inspect main.urls main.downloadMeta main.bigwig1 main.bigwig2 main.bigwig3 main.corrScores --metadata_json runScripts_inputs.metadata.json --reference_json test/test-workflow/ref-output/runScripts_ref.json --outfile result.json
+              cat result.json
+             
 workflows:
   version: 2
   build_workflow:
     jobs:
       - build
       - test_parsing_task:
+          requires:
+            - build
+      - test_downloading_task:
+          requires:
+            - build
+      - test_computing_task:
+          requires:
+            - build
+      - test_workflow:
           requires:
             - build

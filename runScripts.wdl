@@ -98,20 +98,28 @@ workflow main {
 	call parse_json {
 		input: json = jsonMain
 	}
-	call md5parse_json {
-		input: inputFile = parse_json.urls, refFile = jsonRefMain
-	}
+	# call md5parse_json {
+		# input: inputFile = parse_json.urls, refFile = jsonRefMain
+	# }
 	call download {
 		input: downloadInfo = parse_json.downloadMeta
 	}
-	call md5download as md5download {
-		input: inputbw1 = download.bigwig1, inputbw2 = download.bigwig2, inputbw3 = download.bigwig3, refbw1 = refbw1main, refbw2 = refbw2main, refbw3 = refbw3main
-	}
+	# call md5download {
+		# input: inputbw1 = download.bigwig1, inputbw2 = download.bigwig2, inputbw3 = download.bigwig3, refbw1 = refbw1main, refbw2 = refbw2main, refbw3 = refbw3main
+	# }
 	call computeCorr {
 	    input: bigwig1 = download.bigwig1, bigwig2 = download.bigwig2, bigwig3 = download.bigwig3
 	}
-	call md5computeCorr {
-	    input: corrScores = computeCorr.corrScores, refScores = refScoresMain
+	# call md5computeCorr {
+	    # input: corrScores = computeCorr.corrScores, refScores = refScoresMain
+	# }
+	output {
+		File urls = parse_json.urls
+		File downloadMeta = parse_json.downloadMeta
+		File bigwig1 = download.bigwig1
+		File bigwig2 = download.bigwig2
+		File bigwig3 = download.bigwig3
+		File corrScores = computeCorr.corrScores
 	}
 }
 
