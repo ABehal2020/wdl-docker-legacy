@@ -1,5 +1,5 @@
 {
-  "corrMain.inputbw1main": "test/test-data/ENCFF075MCN.bigwig",
-  "corrMain.inputbw2main": "test/test-data/ENCFF231NTN.bigwig",
-  "corrMain.inputbw3main": "test/test-data/ENCFF415GFH.bigwig"
+  "corrMain.inputbw1main": "test/test-data/ENCFF436VFJ.bigwig",
+  "corrMain.inputbw2main": "test/test-data/ENCFF527KDH.bigwig",
+  "corrMain.inputbw3main": "test/test-data/ENCFF624PXE.bigwig"
 }
