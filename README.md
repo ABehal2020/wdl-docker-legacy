@@ -34,4 +34,5 @@ java -jar ../../cromwell.jar run test-download.wdl -i test-download_inputs.json
 # correlate unit test
 java -jar ../../cromwell.jar run test-correlate.wdl -i test-correlate_inputs.json
 
-# CircleCI testing workflow (in progress)
+# CircleCI testing 
+CircleCI testing of indvidual tasks (unit level) and workflow level is successful. Biological data integrity and correct calculations are ensured by md5sum comparisons.
